@@ -20,7 +20,7 @@ public class DinosystemsApplicationTests {
 			"?time_offset=UTC-09:60", "?time_offset=UTC-09:61" ,"?time_offset=UTC+08:000",
 			"?time_offset=UTC+08:00:30", "?time_offset=ABC+08:00",
 			"?time_offset=UTC+08-00", "?time_offset=utc+08:00", "?time_offset=UTC+0800",
-			"?time_offset=UTC08:00","?time_offset=UTC*08:00"})
+			"?time_offset=UTC08:00","?time_offset=UTC*08:00", "?time_offset=UTC%2B08:00"})
 	public void testNumber1(String parameter) throws Exception {  //Invalid parameters
 		RestAssured.baseURI = "http://localhost:8081/time/current";
 		RequestSpecification httpRequest = RestAssured.given();
@@ -36,7 +36,7 @@ public class DinosystemsApplicationTests {
 	@ParameterizedTest
 	@ValueSource(strings = {"?time_offset=UTC+03:00", "?time_offset=UTC-03:00",
 			"?time_offset=UTC+18:00", "?time_offset=UTC-18:00", "?time_offset=UTC+17:59",
-			"?time_offset=UTC-17:59","?time_offset=UTC+00:00", "?time_offset=UTC-00:00",
+			"?time_offset=UTC-17:59","?time_offset=UTC+00:00", "?time_offset=UTC-00:00"
 	})
 	public void testNumber2(String parameter) throws Exception {  // Correct parameters
 		RestAssured.baseURI = "http://localhost:8081/time/current";
