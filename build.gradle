@@ -1,0 +1,59 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.0.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		//TODO add comment about dependencies
+		//classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.3'
+	}
+}
+
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+//apply plugin: 'org.junit.platform.gradle.plugin' // TODO add comment about dependencies
+
+group = 'org.evgen'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+//junitPlatform {
+//	platformVersion '1.0.3' // optional, defaults to plugin version
+//	logManager 'org.apache.logging.log4j.jul.LogManager'
+//	reportsDir file('build/test-results/junit-platform') // this is the default
+//	// enableStandardTestTask true
+//	// selectors (optional)
+//	// filters (optional)
+//}
+configurations {
+	agent
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	//TODO about dependencies
+	testCompile("org.junit.jupiter:junit-jupiter-api:5.0.3")
+	testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.3")
+	testCompile("org.junit.jupiter:junit-jupiter-params:5.0.3")
+	testCompile "io.rest-assured:rest-assured:3.0.7"
+	compile 'org.apache.commons:commons-lang3:3.7'
+	testCompile("ru.yandex.qatools.allure:allure-junit-adaptor:1.5.4")
+	agent "org.aspectj:aspectjweaver:1.8.0"
+	compile("ru.yandex.qatools.allure:allure-report-data:1.5.4")
+
+}
+test {
+	useJUnit()
+}
