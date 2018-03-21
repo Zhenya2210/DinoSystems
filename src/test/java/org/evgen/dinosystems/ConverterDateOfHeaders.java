@@ -2,8 +2,6 @@ package org.evgen.dinosystems;
 
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.junit.runner.RunWith;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

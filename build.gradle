@@ -28,14 +28,6 @@ repositories {
 }
 
 
-//junitPlatform {
-//	platformVersion '1.0.3' // optional, defaults to plugin version
-//	logManager 'org.apache.logging.log4j.jul.LogManager'
-//	reportsDir file('build/test-results/junit-platform') // this is the default
-//	// enableStandardTestTask true
-//	// selectors (optional)
-//	// filters (optional)
-//}
 configurations {
 	agent
 }

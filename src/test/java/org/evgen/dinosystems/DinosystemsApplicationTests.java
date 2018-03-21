@@ -6,7 +6,6 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import ru.yandex.qatools.allure.annotations.Title;
@@ -34,7 +33,7 @@ public class DinosystemsApplicationTests {
 
 
 	@ParameterizedTest
-	@ValueSource(strings = {"?time_offset=UTC+09:00", "?time_offset=UTC-09:00",
+	@ValueSource(strings = {"?time_offset=UTC+03:00", "?time_offset=UTC-03:00",
 			"?time_offset=UTC+18:00", "?time_offset=UTC-18:00", "?time_offset=UTC+17:59",
 			"?time_offset=UTC-17:59","?time_offset=UTC+00:00", "?time_offset=UTC-00:00",
 	})
