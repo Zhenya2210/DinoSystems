@@ -66,7 +66,6 @@ public class DinosystemsApplicationTests {
 		String frombody = body.asString();
 		frombody = frombody.substring(9, 28);
 
-		System.out.println(frombody);
 		Date dateFromBody = df.parse(frombody);
 
 		Headers headers = response.getHeaders();
@@ -85,7 +84,7 @@ public class DinosystemsApplicationTests {
 
 		long difference = (dateFromBody.getTime() - dateFromHeadersResult.getTime()) / 1000;
 		difference = Math.abs(difference);
-		
+
 		Assert.assertTrue(difference <= 5);
 
 	}
