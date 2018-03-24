@@ -70,7 +70,7 @@ public class DinosystemsApplicationTests {
 		DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 		df2.setTimeZone(tz);
 		String dateFromSystemString = df2.format(dateFromSystem);
-		dateFromSystem = df.parse(dateFromSystemString); // Date from system with parameter UTC
+		dateFromSystem = df.parse(dateFromSystemString); // Date from the system with the parameter UTC
 
 		long difference = (dateFromBody.getTime() - dateFromSystem.getTime()) / 1000;
 
