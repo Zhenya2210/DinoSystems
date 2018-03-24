@@ -1,5 +1,7 @@
 package org.evgen.dinosystems.controller.dto;
 
+import org.apache.commons.lang3.time.DateUtils;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZoneOffset;
@@ -23,6 +25,7 @@ public class TimeResponse {
         if (!s2.equals("UTC")) {
             throw new IllegalArgumentException("Invalid query");
         }
+        //time = DateUtils.addSeconds(time, 30);   //For failed test
         String utc = timeOffset.substring(3, 9);
         ZoneOffset offset = ZoneOffset.of(utc);
         TimeZone tz = TimeZone.getTimeZone(offset);
