@@ -33,10 +33,10 @@ public class DinosystemsApplicationTests {
 		RestAssured.baseURI = "http://localhost:8082/time/current";
 		RequestSpecification httpRequest = RestAssured.given();
 		Response response = httpRequest.get(timeOffset);
-		int a = response.getStatusCode();
+		int statusCode = response.getStatusCode();
 		ResponseBody body = response.getBody();
 		String frombody = body.asString();
-		Assert.assertTrue(a == 400);
+		Assert.assertTrue(statusCode == 400);
 		Assert.assertEquals("Invalid query", frombody);
 	}
 
@@ -51,14 +51,13 @@ public class DinosystemsApplicationTests {
 		RequestSpecification httpRequest = RestAssured.given();
 		String parameterInput = timeOffset.substring(16, 22);
 		Response response = httpRequest.get(timeOffset);
-		int a = response.getStatusCode();
-		Assert.assertTrue(a == 200);
+		int statusCode = response.getStatusCode();
+		Assert.assertTrue(statusCode == 200);
 
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		ResponseBody body = response.getBody();
 		String frombody = body.asString();
 		frombody = frombody.substring(9, 28);
-
 		Date dateFromBody = df.parse(frombody); // Date from response body
 
 		Date dateFromSystem = new Date();
@@ -70,11 +69,7 @@ public class DinosystemsApplicationTests {
 		dateFromSystem = df.parse(dateFromSystemString); // Date from the system with the parameter UTC
 
 		long difference = (dateFromBody.getTime() - dateFromSystem.getTime()) / 1000;
-
 		difference = Math.abs(difference);
-
 		Assert.assertTrue(difference <= 5);
-
 	}
-
 }
