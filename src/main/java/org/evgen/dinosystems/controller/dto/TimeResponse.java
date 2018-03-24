@@ -12,7 +12,6 @@ public class TimeResponse {
 
     private String nowAsISO;
 
-    //TODO check serialization without empty constructor
     public TimeResponse() {
     }
 
