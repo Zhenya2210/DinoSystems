@@ -61,8 +61,7 @@ public class DinosystemsApplicationTests {
 		String frombody = body.asString();
 		frombody = frombody.substring(9, 28);
 
-		Date dateFromBody = df.parse(frombody);
-		System.out.println(dateFromBody);
+		Date dateFromBody = df.parse(frombody); // Date from response body
 
 		Date dateFromSystem = new Date();
 		ZoneOffset offset = ZoneOffset.of(parameterInput);
