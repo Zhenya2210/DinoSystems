@@ -8,8 +8,6 @@ import org.junit.Assert;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.runner.RunWith;
-import ru.yandex.qatools.allure.annotations.Title;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZoneOffset;
@@ -31,10 +29,10 @@ public class DinosystemsApplicationTests {
 			"?time_offset=UTC08:00","?time_offset=UTC*08:00", "?time_offset=UTC%2B08:00",
 			"?tIMe_OfFsEt=UTC+03:00", "?time_offset:UTC+03:00", "?itstime_offset=UTC+03:00",
 			"?time offset=UTC+03:00"})
-	public void checkGetTimeUTCWithIncorrectValue(String parameter) throws Exception {  //Invalid parameters
+	public void checkGetTimeUTCWithIncorrectValue(String timeOffset) throws Exception {  //Invalid parameters
 		RestAssured.baseURI = "http://localhost:8082/time/current";
 		RequestSpecification httpRequest = RestAssured.given();
-		Response response = httpRequest.get(parameter);
+		Response response = httpRequest.get(timeOffset);
 		int a = response.getStatusCode();
 		ResponseBody body = response.getBody();
 		String frombody = body.asString();
