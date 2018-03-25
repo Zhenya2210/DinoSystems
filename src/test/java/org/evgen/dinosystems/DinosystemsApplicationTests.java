@@ -54,18 +54,17 @@ public class DinosystemsApplicationTests {
 		int statusCode = response.getStatusCode();
 		Assert.assertTrue(statusCode == 200);
 
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 		ResponseBody body = response.getBody();
 		String frombody = body.asString();
-		frombody = frombody.substring(9, 28);
+		frombody = frombody.substring(9, frombody.length() - 2);
 		Date dateFromBody = df.parse(frombody); // Date from response body
 
 		Date dateFromSystem = new Date();
 		ZoneOffset offset = ZoneOffset.of(parameterInput);
 		TimeZone tz = TimeZone.getTimeZone(offset);
-		DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-		df2.setTimeZone(tz);
-		String dateFromSystemString = df2.format(dateFromSystem);
+		df.setTimeZone(tz);
+		String dateFromSystemString = df.format(dateFromSystem);
 		dateFromSystem = df.parse(dateFromSystemString); // Date from the system with the parameter UTC
 
 		long difference = (dateFromBody.getTime() - dateFromSystem.getTime()) / 1000;
