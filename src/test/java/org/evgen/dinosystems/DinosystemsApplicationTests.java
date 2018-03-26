@@ -71,7 +71,7 @@ public class DinosystemsApplicationTests {
 //		String dateFromSystemString = df.format(dateFromSystem);
 //		dateFromSystem = df.parse(dateFromSystemString); // Date from the system with the parameter UTC
 
-		String TIME_SERVER = "ntp5.stratum2.ru";
+		String TIME_SERVER = "ntp4.stratum2.ru";
 		NTPUDPClient timeClient = new NTPUDPClient();
 		InetAddress inetAddress = InetAddress.getByName(TIME_SERVER);
 		TimeInfo timeInfo = timeClient.getTime(inetAddress);
