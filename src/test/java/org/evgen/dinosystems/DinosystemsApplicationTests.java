@@ -4,10 +4,14 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
+import org.apache.commons.net.ntp.NTPUDPClient;
+import org.apache.commons.net.ntp.TimeInfo;
 import org.junit.Assert;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.runner.RunWith;
+
+import java.net.InetAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZoneOffset;
@@ -42,7 +46,7 @@ public class DinosystemsApplicationTests {
 
 
 	@ParameterizedTest
-	@ValueSource(strings = {"?time_offset=UTC+03:00", "?time_offset=UTC-03:00",
+	@ValueSource(strings = {"?time_offset=UTC+03:00", "?time_offset=UTC-05:00",
 			"?time_offset=UTC+18:00", "?time_offset=UTC-18:00", "?time_offset=UTC+17:59",
 			"?time_offset=UTC-17:59","?time_offset=UTC+00:00", "?time_offset=UTC-00:00"
 	})
@@ -60,14 +64,26 @@ public class DinosystemsApplicationTests {
 		frombody = frombody.substring(9, frombody.length() - 2);
 		Date dateFromBody = df.parse(frombody); // Date from response body
 
-		Date dateFromSystem = new Date();
+//		Date dateFromSystem = new Date();
+//		ZoneOffset offset = ZoneOffset.of(parameterInput);
+//		TimeZone tz = TimeZone.getTimeZone(offset);
+//		df.setTimeZone(tz);
+//		String dateFromSystemString = df.format(dateFromSystem);
+//		dateFromSystem = df.parse(dateFromSystemString); // Date from the system with the parameter UTC
+
+		String TIME_SERVER = "ntp5.stratum2.ru";
+		NTPUDPClient timeClient = new NTPUDPClient();
+		InetAddress inetAddress = InetAddress.getByName(TIME_SERVER);
+		TimeInfo timeInfo = timeClient.getTime(inetAddress);
+		long returnTime = timeInfo.getMessage().getTransmitTimeStamp().getTime();
+		Date dateNTP = new Date(returnTime);
 		ZoneOffset offset = ZoneOffset.of(parameterInput);
 		TimeZone tz = TimeZone.getTimeZone(offset);
 		df.setTimeZone(tz);
-		String dateFromSystemString = df.format(dateFromSystem);
-		dateFromSystem = df.parse(dateFromSystemString); // Date from the system with the parameter UTC
+		String dateNTPString = df.format(dateNTP);
+		dateNTP = df.parse(dateNTPString); // Date from the NTP server with the parameter UTC
 
-		long difference = (dateFromBody.getTime() - dateFromSystem.getTime()) / 1000;
+		long difference = (dateFromBody.getTime() - dateNTP.getTime()) / 1000;
 		difference = Math.abs(difference);
 		Assert.assertTrue(difference <= 5);
 	}
