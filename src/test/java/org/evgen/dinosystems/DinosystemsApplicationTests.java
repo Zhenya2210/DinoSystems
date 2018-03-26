@@ -7,6 +7,8 @@ import io.restassured.specification.RequestSpecification;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.runner.RunWith;
@@ -21,8 +23,13 @@ import java.util.TimeZone;
 
 
 //@RunWith(AllureTestRunner.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DinosystemsApplicationTests {
 
+	@BeforeAll
+	public void setUP(){
+		RestAssured.baseURI = "http://localhost:8082/time/current";
+	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"?time_offset=UTC+18:01",
@@ -34,7 +41,6 @@ public class DinosystemsApplicationTests {
 			"?tIMe_OfFsEt=UTC+03:00", "?time_offset:UTC+03:00", "?itstime_offset=UTC+03:00",
 			"?time offset=UTC+03:00"})
 	public void checkGetTimeUTCWithIncorrectValue(String timeOffset) throws Exception {  //Invalid parameters
-		RestAssured.baseURI = "http://localhost:8082/time/current";
 		RequestSpecification httpRequest = RestAssured.given();
 		Response response = httpRequest.get(timeOffset);
 		int statusCode = response.getStatusCode();
@@ -51,7 +57,6 @@ public class DinosystemsApplicationTests {
 			"?time_offset=UTC-17:59","?time_offset=UTC+00:00", "?time_offset=UTC-00:00"
 	})
 	public void checkGetTimeUTCWithCorrectValue(String timeOffset) throws Exception {  // Correct parameters
-		RestAssured.baseURI = "http://localhost:8082/time/current";
 		RequestSpecification httpRequest = RestAssured.given();
 		String parameterInput = timeOffset.substring(16, 22);
 		Response response = httpRequest.get(timeOffset);
