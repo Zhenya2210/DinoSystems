@@ -1,8 +1,11 @@
 package org.evgen.dinosystems;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
+import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
@@ -20,6 +23,7 @@ import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.TimeZone;
 
+import static io.restassured.RestAssured.given;
 
 
 //@RunWith(AllureTestRunner.class)
@@ -57,24 +61,28 @@ public class DinosystemsApplicationTests {
 			"?time_offset=UTC-17:59","?time_offset=UTC+00:00", "?time_offset=UTC-00:00"
 	})
 	public void checkGetTimeUTCWithCorrectValue(String timeOffset) throws Exception {  // Correct parameters
-		RequestSpecification httpRequest = RestAssured.given();
+
 		String parameterInput = timeOffset.substring(16, 22);
-		Response response = httpRequest.get(timeOffset);
-		int statusCode = response.getStatusCode();
-		Assert.assertTrue(statusCode == 200);
+
+        int statusCode = given()
+                .accept(ContentType.JSON)
+                .when()
+                .get(timeOffset)
+                .thenReturn()
+                .statusCode();
+        Assert.assertTrue(statusCode == 200);
+
+        String jsonString = given()
+                .accept(ContentType.JSON)
+                .when()
+                .get(timeOffset)
+                .thenReturn()
+                .asString();
+        JsonPath json = new JsonPath(jsonString);
+        String frombody = json.getString("time");
 
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-		ResponseBody body = response.getBody();
-		String frombody = body.asString();
-		frombody = frombody.substring(9, frombody.length() - 2);
 		Date dateFromBody = df.parse(frombody); // Date from response body
-
-//		Date dateFromSystem = new Date();
-//		ZoneOffset offset = ZoneOffset.of(parameterInput);
-//		TimeZone tz = TimeZone.getTimeZone(offset);
-//		df.setTimeZone(tz);
-//		String dateFromSystemString = df.format(dateFromSystem);
-//		dateFromSystem = df.parse(dateFromSystemString); // Date from the system with the parameter UTC
 
 		String TIME_SERVER = "ntp4.stratum2.ru";
 		NTPUDPClient timeClient = new NTPUDPClient();
