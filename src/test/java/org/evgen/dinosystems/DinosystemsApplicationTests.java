@@ -5,10 +5,10 @@ import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
-import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
+import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 //@RunWith(AllureTestRunner.class)
@@ -45,13 +47,21 @@ public class DinosystemsApplicationTests {
 			"?tIMe_OfFsEt=UTC+03:00", "?time_offset:UTC+03:00", "?itstime_offset=UTC+03:00",
 			"?time offset=UTC+03:00"})
 	public void checkGetTimeUTCWithIncorrectValue(String timeOffset) throws Exception {  //Invalid parameters
-		RequestSpecification httpRequest = RestAssured.given();
-		Response response = httpRequest.get(timeOffset);
-		int statusCode = response.getStatusCode();
-		ResponseBody body = response.getBody();
-		String frombody = body.asString();
-		Assert.assertTrue(statusCode == 400);
-		Assert.assertEquals("Invalid query", frombody);
+		int statusCode = given()
+				.accept(ContentType.JSON)
+				.when()
+					.get(timeOffset)
+				.thenReturn()
+					.statusCode();
+		assertEquals(HttpStatus.SC_BAD_REQUEST, statusCode);
+
+		String frombody = given()
+				.accept(ContentType.TEXT)
+				.when()
+					.get(timeOffset)
+				.thenReturn()
+					.asString();
+		assertEquals("Invalid query", frombody);
 	}
 
 
@@ -64,20 +74,20 @@ public class DinosystemsApplicationTests {
 
 		String parameterInput = timeOffset.substring(16, 22);
 
-            int statusCode = given()
+		int statusCode = given()
                     .accept(ContentType.JSON)
                     .when()
-                    .get(timeOffset)
+                    	.get(timeOffset)
                     .thenReturn()
-                    .statusCode();
-            Assert.assertTrue(statusCode == 200);
+                    	.statusCode();
+			assertEquals(HttpStatus.SC_OK, statusCode);
 
             String jsonString = given()
                     .accept(ContentType.JSON)
                     .when()
-                    .get(timeOffset)
+                    	.get(timeOffset)
                     .thenReturn()
-                    .asString();
+                    	.asString();
             JsonPath json = new JsonPath(jsonString);
             String frombody = json.getString("time");
 
@@ -98,6 +108,6 @@ public class DinosystemsApplicationTests {
 
 		long difference = (dateFromBody.getTime() - dateNTP.getTime()) / 1000;
 		difference = Math.abs(difference);
-		Assert.assertTrue(difference <= 5);
+		assertTrue(difference <= 5);
 	}
 }
