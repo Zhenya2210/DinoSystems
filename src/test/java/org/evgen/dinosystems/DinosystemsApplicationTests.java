@@ -76,16 +76,16 @@ public class DinosystemsApplicationTests {
                     	.get(timeOffset)
                     .thenReturn()
                     	.statusCode();
-			assertEquals(HttpStatus.SC_OK, statusCode);
+		assertEquals(HttpStatus.SC_OK, statusCode);
 
-            String jsonString = given()
-                    .accept(ContentType.JSON)
-                    .when()
-                    	.get(timeOffset)
-                    .thenReturn()
-                    	.asString();
-            JsonPath json = new JsonPath(jsonString);
-            String frombody = json.getString("time");
+		String jsonString = given()
+				.accept(ContentType.JSON)
+				.when()
+					.get(timeOffset)
+				.thenReturn()
+					.asString();
+		JsonPath json = new JsonPath(jsonString);
+		String frombody = json.getString("time");
 
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 		Date dateFromBody = df.parse(frombody); // Date from response body
