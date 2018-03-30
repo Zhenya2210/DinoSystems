@@ -51,6 +51,7 @@ public class DinosystemsApplicationTests {
 					get(timeOffset).
 				then().
 					assertThat().
+					contentType(ContentType.TEXT).
 					statusCode(HttpStatus.SC_BAD_REQUEST).
 					body(equalTo("Invalid query"));
 	}
@@ -70,6 +71,7 @@ public class DinosystemsApplicationTests {
 					get(timeOffset).
 				then().
 					assertThat().
+					contentType(ContentType.JSON).
 					statusCode(HttpStatus.SC_OK);
 
 		String jsonString = given()
