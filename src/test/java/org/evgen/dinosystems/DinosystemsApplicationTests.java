@@ -7,7 +7,6 @@ import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.runner.RunWith;
@@ -21,17 +20,14 @@ import java.util.TimeZone;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 //@RunWith(AllureTestRunner.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DinosystemsApplicationTests {
 
 	@BeforeAll
-	public void setUP(){
+	public static void setUP(){
 		RestAssured.baseURI = "http://localhost:8082/time/current";
 	}
 
