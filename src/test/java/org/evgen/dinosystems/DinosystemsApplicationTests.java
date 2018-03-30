@@ -20,6 +20,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -43,21 +45,14 @@ public class DinosystemsApplicationTests {
 			"?tIMe_OfFsEt=UTC+03:00", "?time_offset:UTC+03:00", "?itstime_offset=UTC+03:00",
 			"?time offset=UTC+03:00"})
 	public void checkGetTimeUTCWithIncorrectValue(String timeOffset) throws Exception {  //Invalid parameters
-		int statusCode = given()
-				.accept(ContentType.JSON)
-				.when()
-					.get(timeOffset)
-				.thenReturn()
-					.statusCode();
-		assertEquals(HttpStatus.SC_BAD_REQUEST, statusCode);
 
-		String frombody = given()
-				.accept(ContentType.TEXT)
-				.when()
-					.get(timeOffset)
-				.thenReturn()
-					.asString();
-		assertEquals("Invalid query", frombody);
+		given().
+				when().
+					get(timeOffset).
+				then().
+					assertThat().
+					statusCode(HttpStatus.SC_BAD_REQUEST).
+					body(equalTo("Invalid query"));
 	}
 
 
