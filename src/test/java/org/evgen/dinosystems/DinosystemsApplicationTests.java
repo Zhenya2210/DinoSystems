@@ -65,13 +65,12 @@ public class DinosystemsApplicationTests {
 
 		String parameterInput = timeOffset.substring(16, 22);
 
-		int statusCode = given()
-                    .accept(ContentType.JSON)
-                    .when()
-                    	.get(timeOffset)
-                    .thenReturn()
-                    	.statusCode();
-		assertEquals(HttpStatus.SC_OK, statusCode);
+		given().
+				when().
+					get(timeOffset).
+				then().
+					assertThat().
+					statusCode(HttpStatus.SC_OK);
 
 		String jsonString = given()
 				.accept(ContentType.JSON)
