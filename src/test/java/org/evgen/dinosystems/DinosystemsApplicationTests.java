@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 //@RunWith(AllureTestRunner.class)
 public class DinosystemsApplicationTests {
 
-	String uriPattern = "http://localhost:8082/time/current?time_offset={timeUTC}";
+	private String uriPattern = "http://localhost:8082/time/current?time_offset={timeUTC}";
 
 	@ParameterizedTest
 	@ValueSource(strings = {"UTC+18:01", "UTC-18:01", "UTC-009:00",
@@ -67,6 +67,7 @@ public class DinosystemsApplicationTests {
 					get(uriPattern).
 				thenReturn().
 					asString();
+
 		JsonPath json = new JsonPath(jsonString);
 		String frombody = json.getString("time");
 
