@@ -1,12 +1,10 @@
 package org.evgen.dinosystems;
 
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.runner.RunWith;
@@ -26,25 +24,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 //@RunWith(AllureTestRunner.class)
 public class DinosystemsApplicationTests {
 
-	@BeforeAll
-	public static void setUP(){
-		RestAssured.baseURI = "http://localhost:8082/time/current";
-	}
+	String uriPattern = "http://localhost:8082/time/current?time_offset={timeUTC}";
 
 	@ParameterizedTest
-	@ValueSource(strings = {"?time_offset=UTC+18:01",
-			"?time_offset=UTC-18:01", "?time_offset=UTC-009:00",
-			"?time_offset=UTC-09:60", "?time_offset=UTC-09:61" ,"?time_offset=UTC+08:000",
-			"?time_offset=UTC+08:00:30", "?time_offset=ABC+08:00",
-			"?time_offset=UTC+08-00", "?time_offset=utc+08:00", "?time_offset=UTC+0800",
-			"?time_offset=UTC08:00","?time_offset=UTC*08:00", "?time_offset=UTC%2B08:00",
-			"?tIMe_OfFsEt=UTC+03:00", "?time_offset:UTC+03:00", "?itstime_offset=UTC+03:00",
-			"?time offset=UTC+03:00"})
+	@ValueSource(strings = {"UTC+18:01", "UTC-18:01", "UTC-009:00",
+			"UTC-09:60", "UTC-09:61" ,"UTC+08:000", "UTC+08:00:30", "ABC+08:00",
+			"UTC+08-00", "utc+08:00", "UTC+0800", "UTC08:00","UTC*08:00", "UTC%2B08:00"})
 	public void checkGetTimeUTCWithIncorrectValue(String timeOffset) throws Exception {  //Invalid parameters
 
 		given().
+					pathParam("timeUTC", timeOffset).
 				when().
-					get(timeOffset).
+					get(uriPattern).
 				then().
 					assertThat().
 					contentType(ContentType.TEXT).
@@ -54,28 +45,28 @@ public class DinosystemsApplicationTests {
 
 
 	@ParameterizedTest
-	@ValueSource(strings = {"?time_offset=UTC+08:00", "?time_offset=UTC-05:00",
-			"?time_offset=UTC+18:00", "?time_offset=UTC-18:00", "?time_offset=UTC+17:59",
-			"?time_offset=UTC-17:59","?time_offset=UTC+00:00", "?time_offset=UTC-00:00"
-	})
+	@ValueSource(strings = {"UTC+08:00", "UTC-05:00", "UTC+18:00", "UTC-18:00",
+			"UTC+17:59", "UTC-17:59","UTC+00:00", "UTC-00:00"})
 	public void checkGetTimeUTCWithCorrectValue(String timeOffset) throws Exception {  // Correct parameters
 
-		String parameterInput = timeOffset.substring(16, 22);
+		String parameterInput = timeOffset.substring(3, timeOffset.length());
 
 		given().
+					pathParam("timeUTC", timeOffset).
 				when().
-					get(timeOffset).
+					get(uriPattern).
 				then().
 					assertThat().
 					contentType(ContentType.JSON).
 					statusCode(HttpStatus.SC_OK);
 
-		String jsonString = given()
-				.accept(ContentType.JSON)
-				.when()
-					.get(timeOffset)
-				.thenReturn()
-					.asString();
+		String jsonString = given().
+					pathParam("timeUTC", timeOffset).
+					accept(ContentType.JSON).
+				when().
+					get(uriPattern).
+				thenReturn().
+					asString();
 		JsonPath json = new JsonPath(jsonString);
 		String frombody = json.getString("time");
 
