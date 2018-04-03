@@ -24,7 +24,7 @@ public class TimeResponse {
         if (!s2.equals("UTC")) {
             throw new IllegalArgumentException("Invalid query");
         }
-//      time = DateUtils.addSeconds(time, 30);   //For failed test
+//        time = DateUtils.addSeconds(time, 30);   //For failed test
         String utc = timeOffset.substring(3, 9);
         ZoneOffset offset = ZoneOffset.of(utc);
         TimeZone tz = TimeZone.getTimeZone(offset);
