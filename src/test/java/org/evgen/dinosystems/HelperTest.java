@@ -17,9 +17,9 @@ import java.util.TimeZone;
 import static io.restassured.RestAssured.given;
 import static org.evgen.dinosystems.DinosystemsApplicationTests.uriPattern;
 
-public class EVGHelper {
+public class HelperTest {
 
-    private EVGHelper(){}
+    private HelperTest(){}
 
     public static Date getActualTime(String timeOffset) throws ParseException {
 

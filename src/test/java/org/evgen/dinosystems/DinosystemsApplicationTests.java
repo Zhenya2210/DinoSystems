@@ -4,7 +4,6 @@ import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.runner.RunWith;
 
 import java.util.Date;
 
@@ -50,11 +49,11 @@ public class DinosystemsApplicationTests {
 					contentType(ContentType.JSON).
 					statusCode(HttpStatus.SC_OK);
 
-		Date actualTime = EVGHelper.getActualTime(timeOffset); // Date from response body
+		Date actualTime = HelperTest.getActualTime(timeOffset); // Date from the response body
 
-		Date expectedTime = EVGHelper.getExpectedTime(timeOffset); // Date from the NTP server with the parameter UTC
+		Date expectedTime = HelperTest.getExpectedTime(timeOffset); // Date from the NTP server
 
-		long difference = EVGHelper.getDifference(expectedTime, actualTime);
+		long difference = HelperTest.getDifference(expectedTime, actualTime);
 
 		assertTrue(difference <= 5);
 	}
