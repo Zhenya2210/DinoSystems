@@ -19,17 +19,18 @@ import static org.evgen.dinosystems.DinosystemsApplicationTests.uriPattern;
 
 public class HelperTest {
 
-    private HelperTest(){}
+    private HelperTest() {
+    }
 
     public static Date getActualTime(String timeOffset) throws ParseException {
 
         String json = given().
-                        pathParam("timeUTC", timeOffset).
-                        accept(ContentType.JSON).
-                    when().
-                        get(uriPattern).
-                    thenReturn().
-                        asString();
+                pathParam("timeUTC", timeOffset).
+                accept(ContentType.JSON).
+                when().
+                get(uriPattern).
+                thenReturn().
+                asString();
 
         JsonPath jsonPath = new JsonPath(json);
         String timeStringFromBody = jsonPath.getString("time");
@@ -59,7 +60,7 @@ public class HelperTest {
         return expectedTime;
     }
 
-    public static long getDifference(Date expectedTime, Date actualTime){
+    public static long getDifference(Date expectedTime, Date actualTime) {
 
         long difference = (actualTime.getTime() - expectedTime.getTime()) / 1000;
         difference = Math.abs(difference);
