@@ -24,14 +24,14 @@ public class DinosystemsApplicationTests {
     public void getTimeUTCWithIncorrectValue(String timeOffset) throws Exception {  //Invalid parameters
 
         given().
-                pathParam("timeUTC", timeOffset).
+                    pathParam("timeUTC", timeOffset).
                 when().
-                get(uriPattern).
+                    get(uriPattern).
                 then().
-                assertThat().
-                contentType(ContentType.TEXT).
-                statusCode(HttpStatus.SC_BAD_REQUEST).
-                body(equalTo("Invalid query"));
+                    assertThat().
+                    contentType(ContentType.TEXT).
+                    statusCode(HttpStatus.SC_BAD_REQUEST).
+                    body(equalTo("Invalid query"));
     }
 
 
@@ -41,13 +41,13 @@ public class DinosystemsApplicationTests {
     public void getTimeUTCWithCorrectValue(String timeOffset) throws Exception {  // Correct parameters
 
         given().
-                pathParam("timeUTC", timeOffset).
+                    pathParam("timeUTC", timeOffset).
                 when().
-                get(uriPattern).
+                    get(uriPattern).
                 then().
-                assertThat().
-                contentType(ContentType.JSON).
-                statusCode(HttpStatus.SC_OK);
+                    assertThat().
+                    contentType(ContentType.JSON).
+                    statusCode(HttpStatus.SC_OK);
 
         Date actualTime = HelperTest.getActualTime(timeOffset); // Date from the response body
 

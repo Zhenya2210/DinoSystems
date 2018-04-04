@@ -24,21 +24,19 @@ public class HelperTest {
 
     public static Date getActualTime(String timeOffset) throws ParseException {
 
-        String json = given().
-                pathParam("timeUTC", timeOffset).
-                accept(ContentType.JSON).
+        JsonPath jsonPath = given().
+                    pathParam("timeUTC", timeOffset).
+                    accept(ContentType.JSON).
                 when().
-                get(uriPattern).
+                    get(uriPattern).
                 thenReturn().
-                asString();
+                    jsonPath();
 
-        JsonPath jsonPath = new JsonPath(json);
         String timeStringFromBody = jsonPath.getString("time");
-
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-        Date actualTime = df.parse(timeStringFromBody);
 
-        return actualTime;
+        return df.parse(timeStringFromBody);
+
     }
 
     public static Date getExpectedTime(String timeOffset) throws IOException, ParseException {
@@ -55,9 +53,9 @@ public class HelperTest {
         TimeZone tz = TimeZone.getTimeZone(offset);
         df.setTimeZone(tz);
         String dateNTPString = df.format(dateNTP);
-        Date expectedTime = df.parse(dateNTPString);
 
-        return expectedTime;
+        return df.parse(dateNTPString);
+
     }
 
     public static long getDifference(Date expectedTime, Date actualTime) {
